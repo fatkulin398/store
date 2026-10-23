@@ -538,6 +538,24 @@ async function submitOrder(){
     items: Object.entries(cart),
     c: {name:v.name.trim(), phone:v.phone.trim(), area:v.area, address:v.address.trim(), pay:v.pay, note:(v.note||"").trim().slice(0,300)}
   };
+  // Main route: send the order to the shop server (it lands in the admin panel and the bot notifies everyone).
+  const apiUrl = (DATA.store.api_url || "").replace(/\/$/, "");
+  if (apiUrl){
+    if (submitOrder.busy) return; submitOrder.busy = true;
+    if (tg) { try { tg.MainButton.showProgress(); } catch(e){} }
+    try {
+      const r = await fetch(apiUrl + "/api/orders", {method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({items: order.items, c: order.c, initData: tg ? tg.initData : ""})});
+      const data = await r.json().catch(() => ({}));
+      if (r.ok){
+        cart = {}; store.set("cart", cart); updateBadges(); haptic("medium");
+        location.hash = "#/done/" + data.id;
+        return;
+      }
+      if (r.status === 400 || r.status === 429){ toast(data.error || "Проверьте данные заказа"); return; }
+    } catch(e){ /* server unreachable: use the routes below */ }
+    finally { submitOrder.busy = false; if (tg) { try { tg.MainButton.hideProgress(); } catch(e){} } }
+  }
   // Inside Telegram (opened from the bot's keyboard button): the bot receives the order directly.
   if (tg && !tg.initDataUnsafe.query_id){
     try {

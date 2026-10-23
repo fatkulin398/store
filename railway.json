@@ -1,7 +1,11 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "watchPatterns": ["bot/**", "requirements.txt", "railway.json", ".python-version"]
+  },
   "deploy": {
     "startCommand": "python bot/bot.py",
+    "healthcheckPath": "/api/health",
     "restartPolicyType": "ALWAYS"
   }
 }
