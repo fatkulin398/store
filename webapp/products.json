@@ -1,14 +1,167 @@
 {
+  "store": {
+    "name": "GlowStyle",
+    "tagline": "Инструменты для укладки волос с доставкой по Ташкенту",
+    "phone": "+998 90 000-00-00",
+    "telegram_bot": "glowstyle_store_bot",
+    "instagram": "glowstyle.store",
+    "currency": "сум",
+    "delivery_note": "Доставка по Ташкенту и Ташкентской области",
+    "delivery_price": 25000,
+    "free_delivery_from": 500000
+  },
   "categories": [
-    {"id":"myshki","name":"Мышки","icon":"🖱"},
-    {"id":"klaviatury","name":"Клавиатуры","icon":"⌨️"},
-    {"id":"naushniki","name":"Наушники","icon":"🎧"},
-    {"id":"mikrofony","name":"Микрофоны","icon":"🎙"},
-    {"id":"kovriki","name":"Коврики","icon":"🟫"}
+    { "id": "curling", "name": "Плойки", "icon": "curl" },
+    { "id": "dryers", "name": "Фены", "icon": "dryer" },
+    { "id": "brushes", "name": "Фен-щётки", "icon": "brush" },
+    { "id": "straighteners", "name": "Выпрямители", "icon": "iron" },
+    { "id": "stylers", "name": "Стайлеры", "icon": "styler" },
+    { "id": "accessories", "name": "Аксессуары", "icon": "comb" }
   ],
   "products": [
-    {"id":1,"name":"Varmilo Sakura Mouse Wireless","brand":"Varmilo","price":354000,"category":"myshki","img":"https://via.placeholder.com/600?text=Mouse","new":true,"best":true,"desc":"Беспроводная мышь, 2.4G + Bluetooth."},
-    {"id":2,"name":"Durgod Fusion Navigator 68 Cherry MX Brown","brand":"Durgod","price":590000,"oldPrice":690000,"category":"klaviatury","img":"https://via.placeholder.com/600?text=Keyboard","new":true,"sale":true,"desc":"Компактная 68-клавишная, PBT кейкапы."},
-    {"id":3,"name":"Varmilo Warrior-Soar Desk Mat XL","brand":"Varmilo","price":236000,"category":"kovriki","img":"https://via.placeholder.com/600?text=Mat","new":true,"desc":"900×400×3 мм."}
+    {
+      "id": "p001",
+      "name": "Автоматическая плойка Auto Curl 28 мм",
+      "brand": "GlowStyle",
+      "category": "curling",
+      "price": 349000,
+      "old_price": 420000,
+      "image": "",
+      "tags": ["new", "hit"],
+      "stock": 12,
+      "description": "Плойка сама затягивает прядь и подаёт сигнал, когда локон готов. Керамическое покрытие, 3 режима температуры, автоотключение через 60 минут."
+    },
+    {
+      "id": "p002",
+      "name": "Конусная плойка Ceramic Wave 19–32 мм",
+      "brand": "GlowStyle",
+      "category": "curling",
+      "price": 219000,
+      "old_price": 0,
+      "image": "",
+      "tags": ["new"],
+      "stock": 20,
+      "description": "Конус для естественных локонов разного размера. Нагрев до 210 °C за 60 секунд, термоперчатка в комплекте."
+    },
+    {
+      "id": "p003",
+      "name": "Фен Ionic Pro 2200 Вт",
+      "brand": "GlowStyle",
+      "category": "dryers",
+      "price": 389000,
+      "old_price": 450000,
+      "image": "",
+      "tags": ["hit"],
+      "stock": 8,
+      "description": "Профессиональный фен с ионизацией: волосы сохнут быстрее и не электризуются. 3 температуры, 2 скорости, холодный обдув, 2 насадки."
+    },
+    {
+      "id": "p004",
+      "name": "Компактный фен Travel 1600 Вт",
+      "brand": "GlowStyle",
+      "category": "dryers",
+      "price": 159000,
+      "old_price": 0,
+      "image": "",
+      "tags": [],
+      "stock": 25,
+      "description": "Складная ручка, лёгкий вес — удобно брать в поездки. Концентратор в комплекте."
+    },
+    {
+      "id": "p005",
+      "name": "Вращающаяся фен-щётка Rotate Air",
+      "brand": "GlowStyle",
+      "category": "brushes",
+      "price": 459000,
+      "old_price": 550000,
+      "image": "",
+      "tags": ["new", "hit"],
+      "stock": 10,
+      "description": "Щётка вращается в обе стороны: сушит, придаёт объём и укладывает за один проход. Ионизация, 2 насадки разного диаметра."
+    },
+    {
+      "id": "p006",
+      "name": "Фен-щётка Volume Brush 1000 Вт",
+      "brand": "GlowStyle",
+      "category": "brushes",
+      "price": 279000,
+      "old_price": 0,
+      "image": "",
+      "tags": [],
+      "stock": 15,
+      "description": "Овальная щётка для прикорневого объёма и гладких концов. Подходит для средних и длинных волос."
+    },
+    {
+      "id": "p007",
+      "name": "Выпрямитель Silk Plates 230 °C",
+      "brand": "GlowStyle",
+      "category": "straighteners",
+      "price": 249000,
+      "old_price": 299000,
+      "image": "",
+      "tags": ["hit"],
+      "stock": 18,
+      "description": "Турмалиново-керамические пластины, регулировка 150–230 °C, дисплей, блокировка кнопок."
+    },
+    {
+      "id": "p008",
+      "name": "Мини-выпрямитель Pocket",
+      "brand": "GlowStyle",
+      "category": "straighteners",
+      "price": 119000,
+      "old_price": 0,
+      "image": "",
+      "tags": ["new"],
+      "stock": 30,
+      "description": "Маленький выпрямитель для чёлки и коротких волос. Помещается в сумочку."
+    },
+    {
+      "id": "p009",
+      "name": "Мультистайлер 5 в 1",
+      "brand": "GlowStyle",
+      "category": "stylers",
+      "price": 599000,
+      "old_price": 690000,
+      "image": "",
+      "tags": ["hit"],
+      "stock": 6,
+      "description": "Набор из 5 насадок: плойка, конус, выпрямитель, круглая щётка и щётка-распушитель. Кейс для хранения в комплекте."
+    },
+    {
+      "id": "p010",
+      "name": "Беспроводной стайлер Cordless Curl",
+      "brand": "GlowStyle",
+      "category": "stylers",
+      "price": 329000,
+      "old_price": 0,
+      "image": "",
+      "tags": ["new"],
+      "stock": 9,
+      "description": "Работает от аккумулятора до 40 минут, заряжается по USB-C. Для подкручивания локонов в течение дня."
+    },
+    {
+      "id": "p011",
+      "name": "Термозащитный коврик для стайлера",
+      "brand": "GlowStyle",
+      "category": "accessories",
+      "price": 39000,
+      "old_price": 0,
+      "image": "",
+      "tags": [],
+      "stock": 40,
+      "description": "Силиконовый коврик выдерживает до 230 °C. Защищает стол и сам прибор."
+    },
+    {
+      "id": "p012",
+      "name": "Набор зажимов для укладки (10 шт.)",
+      "brand": "GlowStyle",
+      "category": "accessories",
+      "price": 29000,
+      "old_price": 0,
+      "image": "",
+      "tags": [],
+      "stock": 50,
+      "description": "Удобно разделять волосы на пряди при укладке."
+    }
   ]
 }
