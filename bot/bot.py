@@ -1,5 +1,5 @@
 """
-GlowStyle — Telegram-бот магазина.
+ploika.uz — Telegram-бот магазина.
 
 Что делает:
   • /start — приветствие и кнопка «Открыть магазин» (мини-приложение)
@@ -40,7 +40,7 @@ ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "0") or 0)
 PRODUCTS_PATH = Path(os.getenv("PRODUCTS_PATH", Path(__file__).parent.parent / "webapp" / "products.json"))
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("glowstyle")
+log = logging.getLogger("ploika")
 
 dp = Dispatcher()
 

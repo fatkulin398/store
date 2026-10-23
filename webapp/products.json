@@ -1,10 +1,10 @@
 {
   "store": {
-    "name": "GlowStyle",
+    "name": "ploika.uz",
     "tagline": "Инструменты для укладки волос с доставкой по Ташкенту",
     "phone": "+998 95 515 51 11",
     "telegram_bot": "ploikauz_bot",
-    "instagram": "glowstyle.store",
+    "instagram": "",
     "currency": "сум",
     "delivery_note": "Доставка по Ташкенту и Ташкентской области",
     "delivery_price": 25000,
@@ -22,7 +22,7 @@
     {
       "id": "p001",
       "name": "Автоматическая плойка Auto Curl 28 мм",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "curling",
       "price": 349000,
       "old_price": 420000,
@@ -34,7 +34,7 @@
     {
       "id": "p002",
       "name": "Конусная плойка Ceramic Wave 19–32 мм",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "curling",
       "price": 219000,
       "old_price": 0,
@@ -46,7 +46,7 @@
     {
       "id": "p003",
       "name": "Фен Ionic Pro 2200 Вт",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "dryers",
       "price": 389000,
       "old_price": 450000,
@@ -58,7 +58,7 @@
     {
       "id": "p004",
       "name": "Компактный фен Travel 1600 Вт",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "dryers",
       "price": 159000,
       "old_price": 0,
@@ -70,7 +70,7 @@
     {
       "id": "p005",
       "name": "Вращающаяся фен-щётка Rotate Air",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "brushes",
       "price": 459000,
       "old_price": 550000,
@@ -82,7 +82,7 @@
     {
       "id": "p006",
       "name": "Фен-щётка Volume Brush 1000 Вт",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "brushes",
       "price": 279000,
       "old_price": 0,
@@ -94,7 +94,7 @@
     {
       "id": "p007",
       "name": "Выпрямитель Silk Plates 230 °C",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "straighteners",
       "price": 249000,
       "old_price": 299000,
@@ -106,7 +106,7 @@
     {
       "id": "p008",
       "name": "Мини-выпрямитель Pocket",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "straighteners",
       "price": 119000,
       "old_price": 0,
@@ -118,7 +118,7 @@
     {
       "id": "p009",
       "name": "Мультистайлер 5 в 1",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "stylers",
       "price": 599000,
       "old_price": 690000,
@@ -130,7 +130,7 @@
     {
       "id": "p010",
       "name": "Беспроводной стайлер Cordless Curl",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "stylers",
       "price": 329000,
       "old_price": 0,
@@ -142,7 +142,7 @@
     {
       "id": "p011",
       "name": "Термозащитный коврик для стайлера",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "accessories",
       "price": 39000,
       "old_price": 0,
@@ -154,7 +154,7 @@
     {
       "id": "p012",
       "name": "Набор зажимов для укладки (10 шт.)",
-      "brand": "GlowStyle",
+      "brand": "ploika.uz",
       "category": "accessories",
       "price": 29000,
       "old_price": 0,
