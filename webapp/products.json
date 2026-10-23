@@ -1,0 +1,14 @@
+{
+  "categories": [
+    {"id":"myshki","name":"Мышки","icon":"🖱"},
+    {"id":"klaviatury","name":"Клавиатуры","icon":"⌨️"},
+    {"id":"naushniki","name":"Наушники","icon":"🎧"},
+    {"id":"mikrofony","name":"Микрофоны","icon":"🎙"},
+    {"id":"kovriki","name":"Коврики","icon":"🟫"}
+  ],
+  "products": [
+    {"id":1,"name":"Varmilo Sakura Mouse Wireless","brand":"Varmilo","price":354000,"category":"myshki","img":"https://via.placeholder.com/600?text=Mouse","new":true,"best":true,"desc":"Беспроводная мышь, 2.4G + Bluetooth."},
+    {"id":2,"name":"Durgod Fusion Navigator 68 Cherry MX Brown","brand":"Durgod","price":590000,"oldPrice":690000,"category":"klaviatury","img":"https://via.placeholder.com/600?text=Keyboard","new":true,"sale":true,"desc":"Компактная 68-клавишная, PBT кейкапы."},
+    {"id":3,"name":"Varmilo Warrior-Soar Desk Mat XL","brand":"Varmilo","price":236000,"category":"kovriki","img":"https://via.placeholder.com/600?text=Mat","new":true,"desc":"900×400×3 мм."}
+  ]
+}
