@@ -1,1 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>migastore</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{--bg:#000;--card:#161616;--text:#fff;--muted:#8a8a8a;--accent:#fff;--line:#262626}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Inter,sans-serif;padding-bottom:70px}
+  .top{display:flex;align-items:center;gap:10px;padding:14px 16px 8px}
+  .logo{font-weight:800;font-size:20px;letter-spacing:-.5px}
+  .search{flex:1;background:var(--card);border-radius:12px;padding:10px 12px;color:var(--muted);font-size:14px}
+  .sec{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px}
+  .sec h2{margin:0;font-size:18px}
+  .sec a{color:var(--muted);font-size:14px}
+  .cats{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+  .cat{flex:0 0 auto;background:var(--card);border-radius:14px;padding:12px 14px;text-align:center;font-size:13px;min-width:86px}
+  .cat .i{font-size:26px;margin-bottom:4px}
+  .cat.on{outline:1px solid var(--accent)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+  .p{background:var(--card);border-radius:16px;overflow:hidden;position:relative}
+  .p img{width:100%;aspect-ratio:1;object-fit:cover;background:#222}
+  .p .b{padding:10px}
+  .brand{font-size:11px;color:var(--muted)}
+  .nm{font-size:13px;margin:3px 0 6px;min-height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .pr{font-weight:700;font-size:15px}
+  .old{color:var(--muted);text-decoration:line-through;font-size:12px;margin-left:6px}
+  .tag{position:absolute;top:8px;left:8px;background:#e53935;color:#fff;font-size:11px;padding:3px 8px;border-radius:8px}
+  .fav{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .btn{width:100%;border:0;border-radius:12px;padding:11px;font-size:14px;font-weight:600;background:var(--accent);color:#000;margin-top:8px}
+  .btn.g{background:#2a2a2a;color:#fff}
+  input{width:100%;padding:13px;margin:6px 0;border-radius:12px;border:1px solid var(--line);background:var(--card);color:#fff;font-size:16px}
+  .row{display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+  .row img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#222}
+  .qty{display:flex;align-items:center;gap:10px}
+  .qty button{width:30px;height:30px;border:0;border-radius:8px;background:#2a2a2a;color:#fff;font-size:16px}
+  .nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0d0d0d;border-top:1px solid var(--line);padding:8px 0 max(8px,env(safe-area-inset-bottom))}
+  .nav div{flex:1;text-align:center;font-size:11px;color:var(--muted)}
+  .nav div span{display:block;font-size:20px}
+  .nav div.on{color:#fff}
+  .empty{text-align:center;color:var(--muted);padding:60px 16px}
+  .detail img{width:100%;aspect-ratio:1;object-fit:cover}
+  .detail .b{padding:16px}
+  .badge{display:inline-block;background:#2a2a2a;border-radius:8px;padding:4px 10px;font-size:12px;margin:4px 4px 0 0}
+  .pad{padding:0 16px}
+  .total{display:flex;justify-content:space-between;padding:16px;font-size:18px;font-weight:700}
+  .foot{color:var(--muted);font-size:12px;text-align:center;padding:24px 16px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="nav" id="nav"></div>
 
+<script>
+const tg = Telegram.WebApp; tg.expand(); tg.setHeaderColor('#000000'); tg.setBackgroundColor('#000000');
+const S = {
+  data:{categories:[],products:[]}, tab:'home', cat:null, q:'', list:null, detail:null,
+  cart: JSON.parse(localStorage.cart||'{}'), fav: JSON.parse(localStorage.fav||'[]'),
+  orders: JSON.parse(localStorage.orders||'[]'),
+};
+const fmt = n => n.toLocaleString('ru-RU') + ' сум';
+const save = () => { localStorage.cart=JSON.stringify(S.cart); localStorage.fav=JSON.stringify(S.fav); localStorage.orders=JSON.stringify(S.orders); };
+const P = id => S.data.products.find(p=>p.id==id);
+const cartCount = () => Object.values(S.cart).reduce((a,b)=>a+b,0);
+const cartTotal = () => Object.entries(S.cart).reduce((s,[id,q])=>s+P(id).price*q,0);
+
+fetch('products.json').then(r=>r.json()).then(d=>{S.data=d; render();});
+
+/* ---------- компоненты ---------- */
+function card(p){
+  const f = S.fav.includes(p.id), inCart = S.cart[p.id];
+  return `<div class="p">
+    ${p.sale?'<div class="tag">Скидка</div>':p.new?'<div class="tag" style="background:#1e88e5">New</div>':''}
+    <div class="fav" onclick="toggleFav(${p.id})">${f?'❤️':'🤍'}</div>
+    <img src="${p.img}" onclick="open(${p.id})">
+    <div class="b">
+      <div class="brand">${p.brand||''}</div>
+      <div class="nm" onclick="open(${p.id})">${p.name}</div>
+      <div class="pr">${fmt(p.price)}${p.oldPrice?`<span class="old">${fmt(p.oldPrice)}</span>`:''}</div>
+      ${inCart
+        ?`<div class="qty" style="justify-content:space-between;margin-top:8px"><button onclick="add(${p.id},-1)">−</button><b>${inCart}</b><button onclick="add(${p.id},1)">+</button></div>`
+        :`<button class="btn" onclick="add(${p.id},1)">В корзину</button>`}
+    </div></div>`;
+}
+const grid = list => list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">Ничего не найдено</div>`;
+const section = (title, key, list) => list.length ? `<div class="sec"><h2>${title}</h2><a onclick="showList('${key}')">Все</a></div>${grid(list.slice(0,4))}` : '';
+
+/* ---------- экраны ---------- */
+function home(){
+  const pr = S.data.products;
+  return `<div class="top"><div class="logo">migastore</div><div class="search" onclick="go('catalog')">🔍 Поиск товаров</div></div>
+    <div class="sec"><h2>Каталог</h2><a onclick="go('catalog')">Все</a></div>
+    <div class="cats">${S.data.categories.map(c=>`<div class="cat" onclick="S.cat='${c.id}';go('catalog')"><div class="i">${c.icon}</div>${c.name}</div>`).join('')}</div>
+    ${section('Новые поступления','new',pr.filter(p=>p.new))}
+    ${section('Бестселлеры','best',pr.filter(p=>p.best))}
+    ${section('Распродажа','sale',pr.filter(p=>p.sale))}
+    <div class="foot">📞 +998 77 265 03 26<br>Доставка по всему Узбекистану</div>`;
+}
+function catalog(){
+  let list = S.data.products;
+  if (S.list==='new') list=list.filter(p=>p.new);
+  if (S.list==='best') list=list.filter(p=>p.best);
+  if (S.list==='sale') list=list.filter(p=>p.sale);
+  if (S.cat) list=list.filter(p=>p.category===S.cat);
+  if (S.q) list=list.filter(p=>(p.name+' '+p.brand).toLowerCase().includes(S.q.toLowerCase()));
+  const titles={new:'Новые поступления',best:'Бестселлеры',sale:'Распродажа'};
+  return `<div class="top"><input placeholder="Найти" value="${S.q}" oninput="S.q=this.value;render(true)" style="margin:0"></div>
+    <div class="cats" style="margin:8px 0 12px">
+      <div class="cat ${!S.cat?'on':''}" onclick="S.cat=null;S.list=null;render()">Все</div>
+      ${S.data.categories.map(c=>`<div class="cat ${S.cat===c.id?'on':''}" onclick="S.cat='${c.id}';render()">${c.icon} ${c.name}</div>`).join('')}
+    </div>
+    ${S.list?`<div class="sec"><h2>${titles[S.list]}</h2><a onclick="S.list=null;render()">✕</a></div>`:''}
+    ${grid(list)}`;
+}
+function detail(){
+  const p=P(S.detail), c=S.data.categories.find(c=>c.id===p.category), q=S.cart[p.id]||0;
+  return `<div class="detail"><img src="${p.img}"><div class="b">
+    <div class="brand">${p.brand||''} · ${c?c.name:''}</div>
+    <h2 style="margin:6px 0">${p.name}</h2>
+    <div class="pr" style="font-size:22px">${fmt(p.price)}${p.oldPrice?`<span class="old">${fmt(p.oldPrice)}</span>`:''}</div>
+    <p style="color:#ccc;line-height:1.5">${p.desc||''}</p>
+    ${q?`<div class="qty" style="justify-content:center;gap:24px"><button onclick="add(${p.id},-1)">−</button><b style="font-size:18px">${q}</b><button onclick="add(${p.id},1)">+</button></div>`
+       :`<button class="btn" onclick="add(${p.id},1)">В корзину</button>`}
+    <button class="btn g" onclick="toggleFav(${p.id})">${S.fav.includes(p.id)?'❤️ В избранном':'🤍 В избранное'}</button>
+  </div></div>`;
+}
+function cart(){
+  const ids=Object.keys(S.cart);
+  if(!ids.length) return `<div class="top"><div class="logo">Корзина</div></div><div class="empty">Корзина пуста<br><br><button class="btn" style="width:auto;padding:11px 24px" onclick="go('catalog')">В каталог</button></div>`;
+  return `<div class="top"><div class="logo">Корзина</div></div>
+    ${ids.map(id=>{const p=P(id);return `<div class="row"><img src="${p.img}"><div style="flex:1"><div style="font-size:13px">${p.name}</div><div class="pr">${fmt(p.price)}</div></div>
+      <div class="qty"><button onclick="add(${p.id},-1)">−</button><b>${S.cart[id]}</b><button onclick="add(${p.id},1)">+</button></div></div>`}).join('')}
+    <div class="total"><span>Итого</span><span>${fmt(cartTotal())}</span></div>
+    <div class="pad"><button class="btn" onclick="go('checkout')">Оформить заказ</button></div>`;
+}
+function checkout(){
+  const u=tg.initDataUnsafe?.user||{};
+  return `<div class="top"><div class="logo">Оформление</div></div><div class="pad">
+    <input id="name" placeholder="Имя" value="${localStorage.name||u.first_name||''}">
+    <input id="phone" placeholder="Телефон +998..." value="${localStorage.phone||''}">
+    <input id="address" placeholder="Город, адрес доставки" value="${localStorage.address||''}">
+    <input id="comment" placeholder="Комментарий (необязательно)">
+    <div class="total" style="padding:16px 0"><span>К оплате</span><span>${fmt(cartTotal())}</span></div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:12px">Оплата при получении или переводом — менеджер свяжется с вами.</div>
+    <button class="btn" onclick="submit()">Подтвердить заказ</button></div>`;
+}
+function profile(){
+  const u=tg.initDataUnsafe?.user||{};
+  const favs=S.data.products.filter(p=>S.fav.includes(p.id));
+  return `<div class="top"><div class="logo">Профиль</div></div>
+    <div class="row" style="border:0"><div style="width:48px;height:48px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:22px">👤</div>
+      <div><b>${u.first_name||''} ${u.last_name||''}</b><div class="brand">${u.username?'@'+u.username:''}</div></div></div>
+    <div class="sec"><h2>Избранное</h2></div>${favs.length?grid(favs):'<div class="empty" style="padding:20px">Пока пусто</div>'}
+    <div class="sec"><h2>Мои покупки</h2></div>
+    ${S.orders.length?S.orders.slice().reverse().map(o=>`<div class="row"><div style="flex:1"><div style="font-size:13px">${o.date}</div><div class="brand">${o.items.map(i=>i.name+' ×'+i.qty).join(', ')}</div></div><div class="pr">${fmt(o.total)}</div></div>`).join(''):'<div class="empty" style="padding:20px">Заказов ещё нет</div>'}
+    <div class="sec"><h2>Информация</h2></div>
+    <div class="pad" style="color:#ccc;font-size:14px;line-height:1.7">
+      <b>О нас</b><br>Магазин периферии: клавиатуры, мыши, наушники, микрофоны, коврики.<br><br>
+      <b>Доставка</b><br>По Ташкенту — 1 день, по Узбекистану — 2–4 дня.<br><br>
+      <b>Контакты</b><br>+998 77 265 03 26</div>`;
+}
+
+/* ---------- действия ---------- */
+function add(id,d){ S.cart[id]=Math.max(0,(S.cart[id]||0)+d); if(!S.cart[id]) delete S.cart[id]; save(); tg.HapticFeedback?.impactOccurred('light'); render(true); }
+function toggleFav(id){ S.fav = S.fav.includes(id)?S.fav.filter(x=>x!==id):[...S.fav,id]; save(); render(true); }
+function open(id){ S.detail=id; render(); tg.BackButton.show(); }
+function showList(k){ S.list=k; S.cat=null; go('catalog'); }
+function go(tab){ S.tab=tab; S.detail=null; if(tab!=='catalog'){S.q='';} render(); window.scrollTo(0,0); }
+function submit(){
+  const v=id=>document.getElementById(id).value.trim();
+  const name=v('name'),phone=v('phone'),address=v('address'),comment=v('comment');
+  if(!phone||!address){ tg.showAlert('Укажите телефон и адрес'); return; }
+  localStorage.name=name; localStorage.phone=phone; localStorage.address=address;
+  const items=Object.entries(S.cart).map(([id,qty])=>{const p=P(id);return {id:p.id,name:p.name,price:p.price,qty};});
+  const total=cartTotal();
+  S.orders.push({date:new Date().toLocaleString('ru-RU'),items,total}); S.cart={}; save();
+  tg.sendData(JSON.stringify({name,phone,address,comment,items,total}));
+}
+tg.BackButton.onClick(()=>{ if(S.detail){S.detail=null;tg.BackButton.hide();render();} else if(S.tab==='checkout'){go('cart');tg.BackButton.hide();} });
+
+function render(keep){
+  const y=window.scrollY;
+  const screens={home,catalog,cart,checkout,profile};
+  document.getElementById('app').innerHTML = S.detail?detail():screens[S.tab]();
+  if(S.tab==='checkout') tg.BackButton.show();
+  const n=cartCount();
+  document.getElementById('nav').innerHTML=[['home','🏠','Главная'],['catalog','📋','Каталог'],['cart','🛒','Корзина'+(n?` (${n})`:'')],['profile','👤','Профиль']]
+    .map(([t,i,l])=>`<div class="${S.tab===t&&!S.detail?'on':''}" onclick="go('${t}')"><span>${i}</span>${l}</div>`).join('');
+  if(keep) window.scrollTo(0,y);
+  if(S.tab==='catalog'&&keep){const inp=document.querySelector('.top input');if(inp){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);}}
+}
+</script>
+</body>
+</html>
