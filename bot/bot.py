@@ -204,7 +204,7 @@ async def fallback(message: Message) -> None:
 
 async def main() -> None:
     if not BOT_TOKEN or not WEBAPP_URL:
-        raise SystemExit("Заполните BOT_TOKEN и WEBAPP_URL в файле .env (см. README).")
+        raise SystemExit("Не заданы BOT_TOKEN и WEBAPP_URL: впишите их в Variables на Railway или в файл .env (см. README).")
     if not WEBAPP_URL.startswith("https://"):
         raise SystemExit("WEBAPP_URL должен начинаться с https:// — Telegram не открывает мини-приложения по http.")
     bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
